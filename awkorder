@@ -1,0 +1,430 @@
+昨天带着不好的心情坐到工位上后，不时的要压抑一下自己的情绪。
+这个时候kc酱同学在qq上问了我一个问题，想要用awk命令。
+孔超  16:30:59
+awk用过么
+suvia嫣  16:43:23
+怎么啦？
+孔超  16:44:02
+abcde ，相匹配b，d
+孔超  16:44:33
+像匹配包含b，d的数据
+suvia嫣  16:47:26
+做匹配吗？
+孔超  16:47:30
+en啊
+suvia嫣  16:47:32
+只是做匹配？
+suvia嫣  16:47:39
+用正则了？
+孔超  16:47:49
+是用正则啊
+孔超  16:47:58
+但是也不会用
+孔超  16:48:08
+awk -F '/b/'
+suvia嫣  16:48:16
+要在命令里用吗？
+孔超  16:48:18
+这样都没结果
+孔超  16:48:19
+恩
+suvia嫣  16:48:29
+稍等，我帮你看看
+suvia嫣  17:20:58
+亲
+孔超  17:21:00
+恩
+suvia嫣  17:21:07
+这个是搜索文件的
+suvia嫣  17:21:15
+后面跟一个文件
+孔超  17:21:17
+我知道
+suvia嫣  17:21:26
+awk '/b/' aa.txt
+孔超  17:21:29
+恩
+孔超  17:21:39
+但是，我想同时匹配两个地方
+孔超  17:21:47
+这俩还不挨着
+suvia嫣  17:21:54
+哦
+suvia嫣  17:21:56
+好的
+suvia嫣  17:21:57
+稍等
+suvia嫣  17:23:52
+awk '/b/,/d/' aa.txt
+suvia嫣  17:23:58
+这样
+孔超  17:23:58
+我试试
+suvia嫣  17:24:22
+$awk '/[Ss]un/,/[Mm]oon/ {print}' myfile 
+
+它将显示第一个匹配Sun或sun的行与第一个匹配Moon或moon的行之间的行，并显示到标准输出上。 
+孔超  17:28:29
+意思是这一行同时包含符合两个正则的字符串对么
+孔超  17:28:40
+这些行
+suvia嫣  17:29:50
+恩
+suvia嫣  17:30:00
+同时包含这两个的行
+suvia嫣  17:31:16
+不是
+suvia嫣  17:31:18
+错了
+孔超  17:31:24
+怎么呢
+suvia嫣  17:31:51
+比如：
+abcde
+bfghhjh
+dgjl
+suvia嫣  17:32:20
+ 这个命令去先找到b，再找d，这中间的所有行都会输出
+孔超  17:32:43
+这中间是啥意思？
+suvia嫣  17:33:06
+就是中间没有bd的行都会输出
+孔超  17:33:39
+啊？
+孔超  17:33:43
+这。。。
+孔超  17:34:08
+不是在含有b的集合里过滤出含d的集合么
+suvia嫣  17:34:22
+不是
+suvia嫣  17:34:51
+我明白你的需求了
+suvia嫣  17:34:52
+等下
+孔超  17:35:00
+我看结果貌似也是对的啊
+孔超  17:35:21
+每一行都满足含有符合那俩正则的字符串
+suvia嫣  17:36:40
+你可以先用
+suvia嫣  17:36:45
+我再看看
+孔超  17:36:53
+不用，你先忙你的
+孔超  17:36:55
+我就看看
+suvia嫣  17:45:40
+kc
+孔超  17:45:46
+咋啦
+suvia嫣  17:45:50
+你中间加一个\w
+suvia嫣  17:46:03
+'/b\w/d'
+孔超  17:46:16
+额？
+suvia嫣  17:46:26
+这样就是同时匹配
+suvia嫣  17:46:39
+'/b\w*/d'
+孔超  17:46:40
+d在/外边？
+suvia嫣  17:46:55
+不是
+suvia嫣  17:47:03
+'/b\w*d、'
+孔超  17:47:06
+知道了
+suvia嫣  17:47:08
+'/b\w*d/'
+suvia嫣  17:47:32
+\w表示可以任意字符
+suvia嫣  17:47:42
+*表示匹配0或多个
+suvia嫣  17:47:50
+这样匹配才能保证一行
+孔超  17:47:54
+ awk -F: '/v_play\w*29452EC314A4AE1071D744E72E0F5BFF/' 2015061515.txt 
+孔超  17:48:01
+这样好像不行啊
+孔超  17:48:03
+没结果
+suvia嫣  17:48:16
+：是分隔符
+孔超  17:48:21
+v_play 跟 29452EC314A4AE1071D744E72E0F5BFF
+suvia嫣  17:48:25
+要加引号
+孔超  17:48:44
+谁加
+suvia嫣  17:48:52
+_这个要转义
+孔超  17:49:00
+不用吧
+suvia嫣  17:49:09
+ awk -F  ':' '/v\_play\w*29452EC314A4AE1071D744E72E0F5BFF/' 2015061515.txt 
+suvia嫣  17:49:16
+你再试试
+孔超  17:49:43
+awk -F: '/98298FC57E8B47F7F144F2D7F04DE99E\w*中国移动/' 2015061515.txt 
+孔超  17:49:52
+可是这个都不行了
+孔超  17:50:10
+本来，分割的还行
+suvia嫣  17:50:20
+awk -F ':' '/98298FC57E8B47F7F144F2D7F04DE99E\w*中国移动/' 2015061515.txt 
+suvia嫣  17:50:25
+再试试
+suvia嫣  17:50:33
+这个才是在一行中
+suvia嫣  17:50:55
+你刚才那个匹配只能保证文件中有这两个字段
+孔超  17:51:23
+不是一行么
+孔超  17:51:33
+不是按行匹配么
+suvia嫣  17:51:46
+是
+suvia嫣  17:51:58
+但是之前的那种会显示多行
+孔超  17:52:25
+多行里边只有首行跟尾行符合条件么？
+suvia嫣  17:52:36
+bfghhjh
+dgjl
+suvia嫣  17:52:43
+比如这个，这是两行
+孔超  17:52:46
+还是出来的行都符合？
+suvia嫣  17:52:53
+一行匹配b，一行d
+孔超  17:53:06
+不能吧。。。
+suvia嫣  17:53:11
+这样出来的时两行
+孔超  17:53:36
+abc  abcd  abcde
+孔超  17:53:46
+bcde
+孔超  17:53:55
+这四行
+suvia嫣  17:54:00
+恩
+孔超  17:54:01
+匹配ac的话
+suvia嫣  17:54:11
+四行都出来
+孔超  17:54:20
+bcde也出来么。。。
+suvia嫣  17:54:27
+出来
+孔超  17:54:32
+那就不对了
+孔超  17:54:50
+\w的那种方式不行
+suvia嫣  17:54:56
+所以你要用我新的方式
+suvia嫣  17:55:00
+额
+suvia嫣  17:55:11
+中间有空白字符吗？
+孔超  17:55:19
+应该没有
+孔超  17:55:23
+json格式
+suvia嫣  17:55:32
+匹配任何字类字符，包括下划线。与“[A-Za-z0-9_]”等效。
+suvia嫣  17:55:37
+\w
+suvia嫣  17:56:57
+'/b\w*\W*d/'
+suvia嫣  17:57:04
+你再试试这个
+suvia嫣  17:57:13
+再加一个\W
+suvia嫣  17:57:23
+就是中间任意字符
+孔超  18:00:15
+似乎也不行
+suvia嫣  18:00:33
+你能取出一行给我看看吗？
+suvia嫣  18:00:40
+然后再给你写
+孔超  18:00:42
+{"os":"android","phone_udid2":"830BCFFBD3CE533C54E611063FE9A44A","phone_softversion":"1.27.3","events":[{"status":"0","event_id":"v_insertad_act","time":"1434355271916","event_paralist":{"actType":"5"}}],"last_cpid":"bvf1328_10882_001","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10269_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"864395026430339","phone_apn":"中国移动","phone_udid":"98298FC57E8B47F7F144F2D7F04DE99E","gatewayip":"192.168.1.1","phone_mac":"80:41:4e:31:93:de","phone_imsi":"460078584523636","phone_city":""}
+suvia嫣  18:00:50
+好的
+suvia嫣  18:04:39
+kc
+suvia嫣  18:05:09
+你这个用：分割后，当然不能再匹配到了
+suvia嫣  18:05:45
+你这整个应该是一行数据吧，不能用：分割
+孔超  18:06:37
+那就不加分隔符了
+suvia嫣  18:14:39
+awk  '/中国移动\W*|\w*9829/' aa.txt 
+suvia嫣  18:14:48
+后面的自己替换
+suvia嫣  18:15:02
+看明白了吗
+孔超  18:15:07
+或者。。。
+孔超  18:15:16
+这样不是满足其一就行么
+suvia嫣  18:15:41
+就是中间的\W*|\w*表示可以为字符也可以为字母
+孔超  18:16:05
+ 不行
+孔超  18:16:17
+这样只有中国移动的也可以出来了
+suvia嫣  18:16:23
+中国移动","phone_udid":"9829
+你看看这个格式是你要匹配的。
+awk  '/中国移动\"\,\"\w*\_\w*\"\:\W*9829/' aa.txt
+suvia嫣  18:16:26
+对啊
+suvia嫣  18:16:32
+不是啊
+suvia嫣  18:17:18
+ 好像是
+suvia嫣  18:17:20
+稍等
+suvia嫣  18:18:01
+'/中国移动\W*\w*\w*\W*9829/' aa.txt 
+suvia嫣  18:18:08
+你看这个格式
+suvia嫣  18:18:16
+这个是比较简化后的
+孔超  18:19:35
+不行啊
+孔超  18:19:38
+没记过
+孔超  18:19:40
+结果
+suvia嫣  18:20:59
+你怎么操作的
+suvia嫣  18:21:03
+给我看看
+孔超  18:21:09
+awk '/98298FC57E8B47F7F144F2D7F04DE99E\W*\w*\w*\W*中国移动/' 2015061515.txt 
+suvia嫣  18:21:21
+你猪啊
+孔超  18:21:24
+- -
+suvia嫣  18:21:28
+中国移动在前面
+孔超  18:21:30
+为哈
+suvia嫣  18:21:32
+
+suvia嫣  18:21:43
+[dev@yanyuping1-dev ~]$ awk  '/中国移动\W*\w*\w*\W*9829/' aa.txt 
+{"os":"android","phone_udid2":"830BCFFBD3CE533C54E611063FE9A44A","phone_softversion":"1.27.3","events":[{"status":"0","event_id":"v_insertad_act","time":"1434355271916","event_paralist":{"actType":"5"}}],"last_cpid":"bvf1328_10882_001","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10269_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"864395026430339","phone_ap
+suvia嫣  18:21:55
+你给我的格式里面中国移动在前面啊
+孔超  18:22:06
+这样又不符合了
+suvia嫣  18:22:09
+awk  '/中国移动\W*\w*\w*\W*9829/' aa.txt 
+{"os":"android","phone_udid2":"830BCFFBD3CE533C54E611063FE9A44A","phone_softversion":"1.27.3","events":[{"status":"0","event_id":"v_insertad_act","time":"1434355271916","event_paralist":{"actType":"5"}}],"last_cpid":"bvf1328_10882_001","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10269_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"864395026430339","phone_apn":"中国移动","phone_udid":"98298FC57E8B47F7F144F2D7F04DE99E","gatewayip":"192.168.1.1","phone_mac":"80:41:4e:31:93:de","phone_imsi":"460078584523636","phone_city":""}
+suvia嫣  18:22:56
+你可以把文件发给我，然后把所有要匹配的都给我
+suvia嫣  18:22:59
+我给你写好
+孔超  18:23:17
+{"os":"android","phone_udid2":"E20FE59715BBB35955ED6BFFB797EC46","phone_softversion":"1.26.1","events":[{"status":"0","event_id":"v_insertad_act","time":"1434351634985","event_paralist":{"actType":"5"}}],"last_cpid":"","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10891_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"865648020571634","phone_apn":"中国移动","phone_udid":"4882C904148AA025B8E5C5CC3743FDAE","gatewayip":"192.168.1.1","phone_mac":"e0:19:1d:f4:c4:45","phone_imsi":"460078010550790","phone_city":""}
+{"os":"android","phone_udid2":"F3CBBDA65A5EF93A7CF978CADEC16CDC","phone_softversion":"1.26.1","events":[{"status":"0","event_id":"v_my_click","time":"1434254093200","event_paralist":{"clk":"5"}},{"status":"0","event_id":"v_total_size","time":"1434257671968","event_paralist":{"totalsize":"1297.4"}}],"last_cpid":"","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10891_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"863242020019364","phone_apn":"中国移动","phone_udid":"8D185B439F5787FDBB655B9DCE1A323D","gatewayip":"192.168.1.1","phone_mac":"00:08:22:ec:d6:fb","phone_imsi":"460007862340468","phone_city":""}
+{"os":"android","phone_udid2":"D3C80FD926E2A129569F8DAFAE08301D","phone_softversion":"1.27.3","events":[{"status":"0","event_id":"v_download_parse","time":"1434351634858","event_paralist":{"site":"letv","gid":"554cc9080cf29e8153deaffe","result":"0","dataModel":"3","def":"high-dvd","eid":"554cc9080cf29e8153deb015"}}],"last_cpid":"","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10891_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"865242020263408","phone_apn":"中国移动","phone_udid":"AB0A0BF67BF4282D04546F456AFECD39","gatewayip":"192.168.1.1","phone_mac":"68:a0:f6:a3:ef:c0","phone_imsi":"460028558378863","phone_city":""}
+{"os":"android","phone_udid2":"E11E4A693ADE674CF6A1969B77226075","phone_softversion":"1.27.1","events":[{"status":"0","event_id":"v_insertad_act","time":"1433859235622","event_paralist":{"actType":"2"}}],"last_cpid":"","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10890_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"864395024418427","phone_apn":"中国移动","phone_udid":"95E5BBAE85E5B5AC697C5F7120EC4257","gatewayip":"192.168.0.1","phone_mac":"80:41:4e:48:fa:ec","phone_imsi":"460021992457101","phone_city":""}
+{"os":"android","phone_udid2":"E7075437BC5B424BCBB7F417058B44ED","phone_softversion":"1.27.3","events":[{"status":"0","event_id":"v_pause_act","time":"1434351635016","event_paralist":{"tag":"2"}}],"last_cpid":"bvf1328_10891_001","package_name":"com.esvideo","appkey":"307A5C21626E6C2F6472776865646E21","sdk_version":"2.1","cpid":"bvf1328_10928_001","currentnetworktype":"wifi","type":"type_eventinfo","phone_imei":"866571027979718","phone_apn":"中国移动","phone_udid":"959510E97A80DAD296F709A55E652F07","gatewayip":"192.168.1.1","phone_mac":"18:59:36:76:78:28","phone_imsi":"460023613154778","phone_city":""}
+孔超  18:23:24
+这一段放文件里就行了
+suvia嫣  18:23:50
+这是一行吧
+孔超  18:23:52
+匹配 E20FE59715BBB35955ED6BFFB797EC46，中国移动
+孔超  18:23:53
+三行
+孔超  18:23:57
+每个json一行
+孔超  18:24:08
+os开始的
+suvia嫣  18:24:12
+大括号分割？
+孔超  18:24:20
+换行符分割吧
+孔超  18:26:56
+不分割行么
+孔超  18:27:01
+分割有啥用
+suvia嫣  18:27:11
+分割就是分成不同的行
+suvia嫣  18:27:24
+你现在默认是\n分割
+孔超  18:27:28
+那就默认的把
+suvia嫣  18:27:31
+但是我这边看似乎不是
+suvia嫣  18:27:34
+稍等
+suvia嫣  18:31:57
+亲
+孔超  18:32:02
+ai 
+孔超  18:32:18
+用管道可以么
+孔超  18:32:26
+结果再处理
+suvia嫣  18:32:32
+你这个要求是先匹配E20FE59715BBB35955ED6BFFB797EC46，然后匹配这个中国移动吗？
+suvia嫣  18:32:56
+如果是这样。awk  -F '\n' '/E20FE59715BBB35955ED6BFFB797EC46/,/中国移动/' aa.txt 这个就行
+suvia嫣  18:33:50
+他是先找E20FE59715BBB35955ED6BFFB797EC46,然后再找第一个中国移动。成对的现实显示出来
+孔超  18:33:58
+没有先后
+孔超  18:34:35
+我发现管道也行
+suvia嫣  18:34:43
+恩。那你试试
+孔超  18:34:50
+awk '/E20FE59715BBB35955ED6BFFB797EC46/' 2015061515.txt|awk '/中国移动/' 
+孔超  18:34:51
+这样
+孔超  18:35:05
+后边换成grep应该也可吧
+suvia嫣  18:35:11
+恩
+suvia嫣  18:35:13
+可以
+suvia嫣  18:35:29
+grep默认是按行出
+suvia嫣  18:35:32
+这个更简单
+孔超  18:35:55
+恩
+孔超  18:36:02
+呼，辛苦了
+孔超  18:36:04
+忙你的吧
+suvia嫣  18:38:35
+awk  -F '\n' '/E20FE59715BBB35955ED6BFFB797EC46(\W|\w)*中国移动/' aa.txt 
+suvia嫣  18:38:58
+这种也行，就是这两个必须在一行，同时，中间可以有任意字符
+孔超  18:40:42
+我试试看
+孔超  18:46:36
+但是这种有顺序要求吧
+suvia嫣  19:07:55
+恩
+suvia嫣  19:07:56
+是的
+suvia嫣  19:07:58
+亲
+suvia嫣  19:08:05
+你就用grep吧
+suvia嫣  19:08:14
+但是那个也是有要求的
+suvia嫣  19:08:22
+有顺序要求
